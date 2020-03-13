@@ -1,17 +1,20 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
 func main() {
 	// Database
-	// db, err := gorm.Open("sqlite3", "test.db")
-	// if err != nil {
-	// 	panic("failed to connect database")
-	// }
-	// defer db.Close()
+	db, err := gorm.Open("postgres", "host=localhost port=5432 user=goapidbadmin dbname=goapidb password=s3cr3t sslmode=disable")
+	if err != nil {
+		fmt.Println(err)
+		panic("Failed to connect database")
+	}
+	defer db.Close()
 	//
 	// // CRUD
 	// type Product struct {
