@@ -9,17 +9,6 @@ func main() {
 	db.ConnectDatabase()
 	defer db.CloseDatabase()
 
-	//
-	// // CRUD
-	// type Product struct {
-	// 	gorm.Model
-	// 	Code  string
-	// 	Price uint
-	// }
-	//
-	// db.AutoMigrate(&Product{})
-	// db.Create(&Product{Code: "example", Price: 123})
-
 	r := gin.Default()
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{

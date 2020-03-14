@@ -2,14 +2,13 @@ package db
 
 import (
 	"fmt"
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"github.com/jmoiron/sqlx"
 )
 
-var DB *gorm.DB
+var DB *sqlx.DB
 
-func ConnectDatabase() *gorm.DB {
-	db, err := gorm.Open("postgres", "host=localhost port=5432 user=goapidbadmin dbname=goapidb password=s3cr3t sslmode=disable")
+func ConnectDatabase() *sqlx.DB {
+	db, err := sqlx.Connect("postgres", "host=localhost port=5432 user=goapidbadmin dbname=goapidb password=s3cr3t sslmode=disable")
 	if err != nil {
 		fmt.Println(err)
 		panic("Can't connect to the database")
@@ -18,7 +17,7 @@ func ConnectDatabase() *gorm.DB {
 	return DB
 }
 
-func GetDatabase() *gorm.DB {
+func GetDatabase() *sqlx.DB {
 	return DB
 }
 
