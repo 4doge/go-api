@@ -1,17 +1,19 @@
 package db
 
 import (
-	"fmt"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
+	"go-api/config"
 )
 
 var DB *sqlx.DB
 
 func ConnectDatabase() *sqlx.DB {
-	db, err := sqlx.Connect("postgres", "host=localhost port=5432 user=goapidbadmin dbname=goapidb password=s3cr3t sslmode=disable")
+	c := config.GetConfig()
+	// TODO: refactor this crazy connection to database string
+	dataSource := "host=" + c.GetString("database.host") + " port=" + c.GetString("database.port") + " user=" + c.GetString("database.user") + " dbname=" + c.GetString("database.name") + " password=" + c.GetString("database.password") + " sslmode=disable"
+	db, err := sqlx.Connect("postgres", dataSource)
 	if err != nil {
-		fmt.Println(err)
 		panic("Can't connect to the database")
 	}
 	DB = db

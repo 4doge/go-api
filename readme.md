@@ -1,3 +1,5 @@
+[![Go Report Card](https://goreportcard.com/badge/github.com/4doge/go-api)](https://goreportcard.com/report/github.com/4doge/go-api)
+
 # REST API on Golang
 
 ### Migrations
