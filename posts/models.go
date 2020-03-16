@@ -1,46 +1,50 @@
 package posts
 
 import (
+	"github.com/jinzhu/gorm"
 	"go-api/db"
 )
 
 type Post struct {
-	// TODO: check if we need ID here, also investigate about bindings
-	ID    int    `json:"id"`
+	gorm.Model
 	Title string `json:"title"`
 	Body  string `json:"body"`
 }
 
-func GetAllPosts() ([]Post, error) {
+func GetAllPosts() []Post {
 	database := db.GetDatabase()
 	var posts []Post
-	query := "SELECT id, title, body FROM posts"
-	err := database.Select(&posts, query)
-	return posts, err
+	database.Select("id, title, body").Find(&posts)
+	return posts
 }
 
-func CreateNewPost(title string, body string) (Post, error) {
+func CreateNewPost(title string, body string) uint {
 	database := db.GetDatabase()
-	var post Post
-	query := "INSERT INTO posts (title, body) VALUES ($1, $2)"
-	database.MustExec(query, title, body)
-	// TODO: check the result and return a post instance and an error if any
-	return post, nil
+	post := Post{
+		Title: title,
+		Body:  body,
+	}
+	database.Create(&post)
+	return post.ID
 }
 
-func GetSinglePost(id string) (Post, error) {
+func GetSinglePost(id string) Post {
 	database := db.GetDatabase()
 	var post Post
-	query := "SELECT id, title, body FROM posts WHERE id=$1"
-	err := database.Get(&post, query, id)
-	return post, err
+	database.First(&post, id)
+	return post
 }
 
-func UpdateSinglePost(title string, body string, id string) (Post, error) {
-	// TODO: check the result and return a post instance and an error if any
+func UpdateSinglePost(id string, title string, body string) {
 	database := db.GetDatabase()
-	var post Post
-	query := "UPDATE posts SET title=$1, body=$2 WHERE id=$3"
-	database.MustExec(query, title, body, id)
-	return post, nil
+	post := GetSinglePost(id)
+	post.Title = title
+	post.Body = body
+	database.Save(&post)
+}
+
+func RemoveSinglePost(id string) {
+	database := db.GetDatabase()
+	post := GetSinglePost(id)
+	database.Unscoped().Delete(&post)
 }

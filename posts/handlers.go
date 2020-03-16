@@ -6,7 +6,7 @@ import (
 )
 
 func ListPosts(c *gin.Context) {
-	posts, _ := GetAllPosts()
+	posts := GetAllPosts()
 	c.JSON(http.StatusOK, gin.H{
 		"posts": posts,
 	})
@@ -14,32 +14,33 @@ func ListPosts(c *gin.Context) {
 }
 
 func CreatePost(c *gin.Context) {
-	// TODO: investigate how we can accept the JSON body and bind it to the Post struct
-	// var post Post
-	// err := c.Bind(&post)
-	// post, _ := CreateNewPost("title", "body")
-	// fmt.Println(post)
+	var post Post
+	_ = c.Bind(&post)
+	id := CreateNewPost(post.Title, post.Body)
 	c.JSON(http.StatusCreated, gin.H{
 		"success": true,
+		"id": id,
 	})
 }
+
 func RetrievePost(c *gin.Context) {
-	// TODO: check if post exist, return 404 if not
-	post, _ := GetSinglePost(c.Param("id"))
+	post := GetSinglePost(c.Param("id"))
 	c.JSON(http.StatusOK, gin.H{
 		"post": post,
 	})
 }
 
 func UpdatePost(c *gin.Context) {
-	// TODO
+	var post Post
+	_ = c.Bind(&post)
+	UpdateSinglePost(c.Param("id"), post.Title, post.Body)
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 	})
 }
 
 func RemovePost(c *gin.Context) {
-	// TODO
+	RemoveSinglePost(c.Param("id"))
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 	})

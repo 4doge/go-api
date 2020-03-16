@@ -1,5 +1,0 @@
-CREATE TABLE posts (
-    id BIGSERIAL NOT NULL PRIMARY KEY,
-    title VARCHAR NOT NULL,
-    body VARCHAR NOT NULL
-);
